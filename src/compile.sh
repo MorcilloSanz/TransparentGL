@@ -1,0 +1,1 @@
+g++ -std=c++11 main.cc window/TransparentWindow.cc -o test -lX11 -lGL -lXfixes
