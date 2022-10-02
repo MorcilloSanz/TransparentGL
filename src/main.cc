@@ -9,8 +9,8 @@ void drawCallback(TransparentWindow& transparentWindow);
 
 int main() {
 
-    int x = 1000, y = 250;
-    unsigned int width = 300, height = 300;
+    int x = 1400, y = 100;
+    unsigned int width = 400, height = 400;
     
     TransparentWindow window("Transparent window", x, y, width, height);
     window.startDrawing(drawCallback);
