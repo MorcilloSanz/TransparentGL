@@ -58,21 +58,21 @@ void TransparentWindow::createWindow() {
         &attr
     ) ;
 
-    gc = XCreateGC( display, win, 0, 0) ;
+    gc = XCreateGC(display, win, 0, 0) ;
 
     // set title bar name of window
-    XStoreName( display, win, title.c_str()) ;
+    XStoreName(display, win, title.c_str()) ;
 
     // say window manager which position we would prefer
     XSizeHints sizehints ;
     sizehints.flags = PPosition | PSize ;
     sizehints.x     = x ;  sizehints.y = y ;
     sizehints.width = width ; sizehints.height = height;
-    XSetWMNormalHints( display, win, &sizehints ) ;
+    XSetWMNormalHints(display, win, &sizehints) ;
 
     // Switch On >> If user pressed close key let window manager only send notification >>
     Atom wm_delete_window = XInternAtom( display, "WM_DELETE_WINDOW", 0) ;
-    XSetWMProtocols( display, win, &wm_delete_window, 1) ;
+    XSetWMProtocols(display, win, &wm_delete_window, 1) ;
 
     // Create OpenGLContext
     createOpenGLContext();
@@ -92,26 +92,15 @@ void TransparentWindow::initWindow() {
     createWindow();
 }
 
-void TransparentWindow::setDrawCallback(const Callback& drawCallback) {
+void TransparentWindow::startDrawing(const Callback& drawCallback) {
     this->drawCallback = drawCallback;
 
     while(open) {
-        /* XPending returns number of already queued events.
-        * If no events are queued XPending sends all queued requests to the X-server
-        * and tries to read new incoming events. */
+
         while( XPending(display) > 0 ) {
             XNextEvent( display, &event) ;
 
-            switch(event.type) {  // see 'man XAnyEvent' for a list of available events
-            case ClientMessage:
-                // check if the client message was send by window manager to indicate user wants to close the window
-                if (event.xclient.message_type  == XInternAtom( display, "WM_PROTOCOLS", 1)
-                && event.xclient.data.l[0]  == XInternAtom( display, "WM_DELETE_WINDOW", 1))
-                    open = false;
-            break;
-            case KeyPress:
-
-            break ;
+            switch(event.type) {
             case Expose:
                 redraw = true;
             break;
